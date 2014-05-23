@@ -6,19 +6,11 @@ var request = require("request");
 var q = require("q");
 var fs = require("fs");
 
-var lists = [{
-  id: 180106,
-  name: "UK",
-  day: 1
-}, {
-  id: 60198,
-  name: "Billboard",
-  day: 1
-}, {
-  id: 60131,
-  name: "Oricon",
-  day: 4
-}];
+var lists = [
+  {id: 180106, name: "UK", day: 1},
+  {id: 60198, name: "Billboard", day: 1},
+  {id: 60131, name: "Oricon", day: 4}
+];
 var path = "./";
 
 function summyList(input) {
@@ -83,15 +75,12 @@ function runTask() {
   var today = date.getDay();
   var taskList = [];
   for(var i=0; i < lists.length; i++) {
-    if(lists[i].date == today) {
+    if(lists[i].day == 1) {
       taskList[i] = lists[i].id;
     }
   }
-  if(taskList.length==0) {
-    console.log(9);
-    return;
-  }
-  q.all(taskList.map(function() {
+  if(taskList.length==0) return;
+  q.all(taskList.map(function(id) {
     req(id)
       .then(summyList)
       .then(packSimpleList2Kgl)
